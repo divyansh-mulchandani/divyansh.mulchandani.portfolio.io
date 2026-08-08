@@ -172,7 +172,6 @@ export default function Home() {
       <section id="hero" className={styles.hero}>
         <div className={styles.heroBg} />
         <div className={styles.heroContent}>
-          <p className={styles.heroGreeting}>Hello, I&apos;m</p>
           <h1 className={styles.heroName}>Divyansh Mulchandani</h1>
           <p className={styles.heroTitle}>Cloud Platform Engineer &nbsp;·&nbsp; SRE &nbsp;·&nbsp; DevOps &nbsp;·&nbsp; Forward Deployed Engineer &nbsp;·&nbsp; Automation &nbsp;·&nbsp; Backend Engineer</p>
           <p className={styles.heroSummary}>
