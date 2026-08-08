@@ -22,6 +22,7 @@ import {
   CloudServerOutlined,
   HddOutlined,
 } from "@ant-design/icons";
+import styles from "./status.module.css";
 
 const { Title, Text } = Typography;
 
@@ -68,7 +69,7 @@ function loadColor(load: number, cores: number): string {
   return "#48bb78";
 }
 
-const CARD_STYLE = {
+const CARD = {
   background: "rgba(13,27,53,0.7)",
   border: "1px solid rgba(99,179,237,0.15)",
 };
@@ -84,110 +85,118 @@ export default function StatusClient({ data }: { data: StatusData }) {
         token: { colorPrimary: "#63b3ed", colorBgBase: "#0a0e1a" },
       }}
     >
-      <div style={{ minHeight: "100vh", background: "#0a0e1a", padding: "80px 24px 40px" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+      <div className={styles.page}>
+        <div className={styles.inner}>
 
-          <Space direction="vertical" size={8} style={{ marginBottom: 32 }}>
+          {/* ── header ── */}
+          <div className={styles.header}>
             <Text style={{ color: "#63b3ed", letterSpacing: "0.15em", textTransform: "uppercase", fontSize: 12 }}>
               System Status
             </Text>
-            <Title level={2} style={{ color: "#f7fafc", margin: 0 }}>
-              Infrastructure &nbsp;
+            <Title level={2} className={styles.headerTitle} style={{ marginTop: 8 }}>
+              Infrastructure
               {isOk ? (
-                <Tag icon={<CheckCircleOutlined />} color="success" style={{ fontSize: 14, padding: "2px 12px" }}>
+                <Tag icon={<CheckCircleOutlined />} color="success" style={{ fontSize: 13, padding: "2px 10px" }}>
                   Operational
                 </Tag>
               ) : (
-                <Tag icon={<WarningOutlined />} color="warning" style={{ fontSize: 14, padding: "2px 12px" }}>
+                <Tag icon={<WarningOutlined />} color="warning" style={{ fontSize: 13, padding: "2px 10px" }}>
                   Degraded
                 </Tag>
               )}
             </Title>
-            <Text style={{ color: "#718096" }}>
+            <Text style={{ color: "#718096", fontSize: 13 }}>
               Last updated: {new Date(data.timestamp).toLocaleString()}
             </Text>
-          </Space>
+          </div>
 
-          {/* ── top stat cards ── */}
-          <Row gutter={[20, 20]}>
-            <Col xs={24} sm={12} md={6}>
-              <Card style={CARD_STYLE}>
+          {/* ── top stat cards: 2×2 on mobile, 4 across on md+ ── */}
+          <Row gutter={[16, 16]}>
+            <Col xs={12} sm={12} md={6}>
+              <Card style={CARD} styles={{ body: { padding: "16px 20px" } }}>
                 <Statistic
-                  title={<Text style={{ color: "#718096" }}>Uptime</Text>}
+                  title={<Text style={{ color: "#718096", fontSize: 12 }}>Uptime</Text>}
                   value={formatUptime(data.uptimeSeconds)}
                   prefix={<ClockCircleOutlined style={{ color: "#63b3ed" }} />}
-                  valueStyle={{ color: "#f7fafc", fontSize: 18 }}
+                  valueStyle={{ color: "#f7fafc", fontSize: 16 }}
                 />
               </Card>
             </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card style={CARD_STYLE}>
+            <Col xs={12} sm={12} md={6}>
+              <Card style={CARD} styles={{ body: { padding: "16px 20px" } }}>
                 <Statistic
-                  title={<Text style={{ color: "#718096" }}>CPU Cores</Text>}
+                  title={<Text style={{ color: "#718096", fontSize: 12 }}>CPU Cores</Text>}
                   value={data.cpuCount}
                   prefix={<DesktopOutlined style={{ color: "#63b3ed" }} />}
-                  valueStyle={{ color: "#f7fafc" }}
+                  valueStyle={{ color: "#f7fafc", fontSize: 16 }}
                 />
               </Card>
             </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card style={CARD_STYLE}>
+            <Col xs={12} sm={12} md={6}>
+              <Card style={CARD} styles={{ body: { padding: "16px 20px" } }}>
                 <Statistic
-                  title={<Text style={{ color: "#718096" }}>Node.js</Text>}
+                  title={<Text style={{ color: "#718096", fontSize: 12 }}>Node.js</Text>}
                   value={data.nodeVersion}
                   prefix={<CloudServerOutlined style={{ color: "#63b3ed" }} />}
-                  valueStyle={{ color: "#f7fafc", fontSize: 18 }}
+                  valueStyle={{ color: "#f7fafc", fontSize: 16 }}
                 />
               </Card>
             </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card style={{ background: "rgba(13,27,53,0.7)", border: `1px solid ${data.mongodb === "up" ? "rgba(72,187,120,0.3)" : "rgba(252,129,74,0.3)"}` }}>
+            <Col xs={12} sm={12} md={6}>
+              <Card
+                style={{
+                  background: "rgba(13,27,53,0.7)",
+                  border: `1px solid ${data.mongodb === "up" ? "rgba(72,187,120,0.3)" : "rgba(252,129,74,0.3)"}`,
+                }}
+                styles={{ body: { padding: "16px 20px" } }}
+              >
                 <Statistic
-                  title={<Text style={{ color: "#718096" }}>MongoDB</Text>}
-                  value={data.mongodb === "up" ? "Connected" : "Unavailable"}
+                  title={<Text style={{ color: "#718096", fontSize: 12 }}>MongoDB</Text>}
+                  value={data.mongodb === "up" ? "Connected" : "Down"}
                   prefix={<DatabaseOutlined style={{ color: data.mongodb === "up" ? "#48bb78" : "#fc8149" }} />}
-                  valueStyle={{ color: data.mongodb === "up" ? "#48bb78" : "#fc8149", fontSize: 18 }}
+                  valueStyle={{ color: data.mongodb === "up" ? "#48bb78" : "#fc8149", fontSize: 16 }}
                 />
               </Card>
             </Col>
           </Row>
 
-          <Divider style={{ borderColor: "rgba(99,179,237,0.1)", margin: "32px 0" }} />
+          <Divider style={{ borderColor: "rgba(99,179,237,0.1)", margin: "28px 0" }} />
 
-          {/* ── memory + load average ── */}
-          <Row gutter={[20, 20]}>
+          {/* ── memory + load average: stacked on mobile, side-by-side on md+ ── */}
+          <Row gutter={[16, 16]}>
 
             {/* memory */}
             <Col xs={24} md={10}>
               <Card
                 title={
-                  <Space>
+                  <Space size={8}>
                     <HddOutlined style={{ color: "#63b3ed" }} />
                     <Text style={{ color: "#a0aec0" }}>Memory</Text>
                   </Space>
                 }
-                style={CARD_STYLE}
+                style={CARD}
               >
-                <Row gutter={[16, 16]}>
-                  <Col span={8}>
+                {/* 3 stats: each takes full width on xs, 1/3 on sm+ */}
+                <Row gutter={[12, 16]}>
+                  <Col xs={8}>
                     <Statistic
-                      title={<Text style={{ color: "#718096", fontSize: 12 }}>Total</Text>}
+                      title={<Text style={{ color: "#718096", fontSize: 11 }}>Total</Text>}
                       value={`${(data.memory.totalMB / 1024).toFixed(1)} GB`}
-                      valueStyle={{ color: "#f7fafc", fontSize: 18 }}
+                      valueStyle={{ color: "#f7fafc", fontSize: 15 }}
                     />
                   </Col>
-                  <Col span={8}>
+                  <Col xs={8}>
                     <Statistic
-                      title={<Text style={{ color: "#718096", fontSize: 12 }}>Used</Text>}
+                      title={<Text style={{ color: "#718096", fontSize: 11 }}>Used</Text>}
                       value={`${(data.memory.usedMB / 1024).toFixed(1)} GB`}
-                      valueStyle={{ color: mc, fontSize: 18 }}
+                      valueStyle={{ color: mc, fontSize: 15 }}
                     />
                   </Col>
-                  <Col span={8}>
+                  <Col xs={8}>
                     <Statistic
-                      title={<Text style={{ color: "#718096", fontSize: 12 }}>Free</Text>}
+                      title={<Text style={{ color: "#718096", fontSize: 11 }}>Free</Text>}
                       value={`${(data.memory.freeMB / 1024).toFixed(1)} GB`}
-                      valueStyle={{ color: "#48bb78", fontSize: 18 }}
+                      valueStyle={{ color: "#48bb78", fontSize: 15 }}
                     />
                   </Col>
                 </Row>
@@ -212,13 +221,13 @@ export default function StatusClient({ data }: { data: StatusData }) {
             <Col xs={24} md={14}>
               <Card
                 title={<Text style={{ color: "#a0aec0" }}>Load Average</Text>}
-                style={CARD_STYLE}
+                style={CARD}
               >
-                <Row gutter={[16, 24]}>
+                <Row gutter={[12, 20]}>
                   {[
-                    { label: "1 minute", value: data.loadAverage.oneMinute },
-                    { label: "5 minutes", value: data.loadAverage.fiveMinutes },
-                    { label: "15 minutes", value: data.loadAverage.fifteenMinutes },
+                    { label: "1 min", value: data.loadAverage.oneMinute },
+                    { label: "5 min", value: data.loadAverage.fiveMinutes },
+                    { label: "15 min", value: data.loadAverage.fifteenMinutes },
                   ].map((item) => {
                     const lc = loadColor(item.value, data.cpuCount);
                     const pct = Math.min((item.value / data.cpuCount) * 100, 100);
@@ -249,11 +258,8 @@ export default function StatusClient({ data }: { data: StatusData }) {
 
           </Row>
 
-          <div style={{ marginTop: 32, textAlign: "center" }}>
-            <a href="/" style={{ color: "#63b3ed", fontSize: 14 }}>
-              ← Back to Portfolio
-            </a>
-          </div>
+          <a href="/" className={styles.back}>← Back to Portfolio</a>
+
         </div>
       </div>
     </ConfigProvider>
