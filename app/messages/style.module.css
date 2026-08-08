@@ -1,0 +1,97 @@
+.wrapper {
+  min-height: 100vh;
+  background: #0a0e1a;
+  padding: 80px 24px 40px;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.title {
+  color: #f7fafc !important;
+  margin: 0 !important;
+}
+
+.label {
+  font-size: 0.75rem;
+  color: #63b3ed;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.tableWrap {
+  background: rgba(13, 27, 53, 0.7);
+  border: 1px solid rgba(99, 179, 237, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.emptyState {
+  padding: 80px 24px;
+  text-align: center;
+  color: #4a5568;
+}
+
+.errorState {
+  padding: 40px 24px;
+  text-align: center;
+  color: #fc8149;
+}
+
+.messageText {
+  color: #a0aec0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  max-width: 380px;
+}
+
+.loginWrapper {
+  min-height: 100vh;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(13, 27, 53, 0.8) !important;
+  border: 1px solid rgba(99, 179, 237, 0.15) !important;
+  border-radius: 20px !important;
+}
+
+.loginTitle {
+  color: #f7fafc !important;
+  margin-bottom: 4px !important;
+}
+
+.loginSubtitle {
+  color: #718096;
+  margin-bottom: 32px;
+  font-size: 0.9rem;
+}
+
+.loginError {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

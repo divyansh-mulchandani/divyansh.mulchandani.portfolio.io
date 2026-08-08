@@ -1,0 +1,10 @@
+/path/to/divyansh-nextjs-portfolio/logs/*.log {
+    daily
+    rotate 14
+    size 10M
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}
