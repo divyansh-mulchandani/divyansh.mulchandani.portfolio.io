@@ -22,6 +22,8 @@ export async function GET(req: Request): Promise<Response> {
         login: "POST /api/auth/login",
         logout: "POST /api/auth/logout",
         messages: "GET|POST /api/messages",
+        admin: "GET|POST /api/admin",
+        changePassword: "POST /api/auth/change-password",
       },
     })
   );

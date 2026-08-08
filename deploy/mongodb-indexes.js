@@ -8,11 +8,15 @@ async function createIndexes() {
   try {
     await client.connect();
     const db = client.db(dbName);
-    const col = db.collection("messages");
 
-    await col.createIndex({ createdAt: -1 }, { name: "messages_createdAt_desc" });
-    await col.createIndex({ email: 1 }, { name: "messages_email_asc" });
-    await col.createIndex({ id: 1 }, { unique: true, name: "messages_id_unique" });
+    const messages = db.collection("messages");
+    await messages.createIndex({ createdAt: 1 }, { name: "messages_createdAt_asc" });
+    await messages.createIndex({ createdAt: -1 }, { name: "messages_createdAt_desc" });
+    await messages.createIndex({ email: 1 }, { name: "messages_email_asc" });
+    await messages.createIndex({ id: 1 }, { unique: true, name: "messages_id_unique" });
+
+    const rotLog = db.collection("rotation_log");
+    await rotLog.createIndex({ ts: -1 }, { name: "rotation_log_ts_desc" });
 
     console.log("Indexes created successfully.");
   } finally {
