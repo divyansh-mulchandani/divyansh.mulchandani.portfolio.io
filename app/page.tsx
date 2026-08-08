@@ -6,7 +6,6 @@ import {
   GithubOutlined,
   LinkedinOutlined,
   MailOutlined,
-  PhoneOutlined,
   MediumOutlined,
   CloudOutlined,
   CodeOutlined,
@@ -430,13 +429,7 @@ export default function Home() {
                   <div className={styles.contactValue}>{SOCIAL_LINKS.email}</div>
                 </div>
               </a>
-              <a href={`tel:${SOCIAL_LINKS.phone}`} className={styles.contactLink}>
-                <PhoneOutlined className={styles.contactIcon} />
-                <div>
-                  <div className={styles.contactLabel}>Phone</div>
-                  <div className={styles.contactValue}>{SOCIAL_LINKS.phone}</div>
-                </div>
-              </a>
+
               <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
                 <LinkedinOutlined className={styles.contactIcon} />
                 <div>
