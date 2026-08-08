@@ -175,7 +175,7 @@ export default function Home() {
         <div className={styles.heroContent}>
           <p className={styles.heroGreeting}>Hello, I&apos;m</p>
           <h1 className={styles.heroName}>Divyansh Mulchandani</h1>
-          <p className={styles.heroTitle}>Cloud Platform Engineer &nbsp;·&nbsp; SRE &nbsp;·&nbsp; DevOps</p>
+          <p className={styles.heroTitle}>Cloud Platform Engineer &nbsp;·&nbsp; SRE &nbsp;·&nbsp; DevOps &nbsp;·&nbsp; Forward Deployed Engineer &nbsp;·&nbsp; Automation &nbsp;·&nbsp; Backend Engineer</p>
           <p className={styles.heroSummary}>
             Cloud Platform Engineer with 3+ years of experience at a wireless telecom solutions company.
             Proficient in Linux, Docker, Kubernetes, AWS, on-premises cloud infrastructure, and CI/CD.
@@ -202,7 +202,7 @@ export default function Home() {
             </Button>
           </div>
           <div className={styles.heroBadges}>
-            {["Kubernetes", "AWS", "Linux", "CI/CD", "Terraform", "OpenRAN"].map((b) => (
+            {["Kubernetes", "AWS", "Linux", "CI/CD", "Terraform", "OpenRAN", "Automation", "Backend", "FDE"].map((b) => (
               <span key={b} className={styles.heroBadge}>{b}</span>
             ))}
           </div>
@@ -419,7 +419,7 @@ export default function Home() {
           {/* left — links */}
           <div>
             <p className={styles.aboutText}>
-              I&apos;m open to Cloud Platform Engineering, SRE, DevOps, and Infrastructure Engineering roles.
+              I&apos;m open to Cloud Platform Engineering, SRE, DevOps, Forward Deployed Engineering, Automation, Backend Engineering, and Infrastructure Engineering roles.
               Whether you have a project, a question, or just want to say hello — drop me a message.
             </p>
             <div className={styles.contactLinks} style={{ marginTop: 28 }}>
