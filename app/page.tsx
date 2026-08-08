@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Tag, ConfigProvider, theme } from "antd";
+import { Button, Tag, ConfigProvider, theme, Form, Input, Alert } from "antd";
 import {
   GithubOutlined,
   LinkedinOutlined,
@@ -10,15 +10,13 @@ import {
   MediumOutlined,
   CloudOutlined,
   CodeOutlined,
-  DeploymentUnitOutlined,
   MonitorOutlined,
   TrophyOutlined,
   ReadOutlined,
-  SafetyCertificateOutlined,
-  DatabaseOutlined,
-  TeamOutlined,
-  RocketOutlined,
   BranchesOutlined,
+  DatabaseOutlined,
+  SendOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { SOCIAL_LINKS } from "@/lib/env";
 import styles from "./page.module.css";
@@ -118,6 +116,36 @@ const CERTIFICATIONS = [
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [contactForm] = Form.useForm();
+  const [sending, setSending] = useState(false);
+  const [sendResult, setSendResult] = useState<"success" | "error" | null>(null);
+  const [sendError, setSendError] = useState<string | null>(null);
+
+  async function onContactSubmit(values: { name: string; email: string; message: string }) {
+    setSending(true);
+    setSendResult(null);
+    setSendError(null);
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setSendResult("success");
+        contactForm.resetFields();
+      } else {
+        setSendResult("error");
+        setSendError(data.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setSendResult("error");
+      setSendError("Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <ConfigProvider
@@ -387,70 +415,140 @@ export default function Home() {
         <p className={styles.sectionLabel}>Let&apos;s connect</p>
         <h2 className={styles.sectionTitle}>Get in <span>Touch</span></h2>
         <div className={styles.contactGrid}>
+
+          {/* left — links */}
           <div>
             <p className={styles.aboutText}>
               I&apos;m open to Cloud Platform Engineering, SRE, DevOps, and Infrastructure Engineering roles.
-              Whether you have a project, a question, or just want to say hello — feel free to reach out.
+              Whether you have a project, a question, or just want to say hello — drop me a message.
             </p>
+            <div className={styles.contactLinks} style={{ marginTop: 28 }}>
+              <a href={`mailto:${SOCIAL_LINKS.email}`} className={styles.contactLink}>
+                <MailOutlined className={styles.contactIcon} />
+                <div>
+                  <div className={styles.contactLabel}>Email</div>
+                  <div className={styles.contactValue}>{SOCIAL_LINKS.email}</div>
+                </div>
+              </a>
+              <a href={`tel:${SOCIAL_LINKS.phone}`} className={styles.contactLink}>
+                <PhoneOutlined className={styles.contactIcon} />
+                <div>
+                  <div className={styles.contactLabel}>Phone</div>
+                  <div className={styles.contactValue}>{SOCIAL_LINKS.phone}</div>
+                </div>
+              </a>
+              <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                <LinkedinOutlined className={styles.contactIcon} />
+                <div>
+                  <div className={styles.contactLabel}>LinkedIn</div>
+                  <div className={styles.contactValue}>linkedin.com/in/divyansh-mulchandani</div>
+                </div>
+              </a>
+              <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                <GithubOutlined className={styles.contactIcon} />
+                <div>
+                  <div className={styles.contactLabel}>GitHub</div>
+                  <div className={styles.contactValue}>github.com/divyansh-mulchandani</div>
+                </div>
+              </a>
+              <a href={SOCIAL_LINKS.medium} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                <MediumOutlined className={styles.contactIcon} />
+                <div>
+                  <div className={styles.contactLabel}>Medium</div>
+                  <div className={styles.contactValue}>medium.com/@divyansh.mulchandani</div>
+                </div>
+              </a>
+            </div>
           </div>
-          <div className={styles.contactLinks}>
-            <a
-              href={`mailto:${SOCIAL_LINKS.email}`}
-              className={styles.contactLink}
-            >
-              <MailOutlined className={styles.contactIcon} />
-              <div>
-                <div className={styles.contactLabel}>Email</div>
-                <div className={styles.contactValue}>{SOCIAL_LINKS.email}</div>
+
+          {/* right — contact form */}
+          <div className={styles.contactFormCard}>
+            {sendResult === "success" ? (
+              <div className={styles.contactSuccess}>
+                <CheckCircleOutlined style={{ fontSize: 40, color: "#48bb78", marginBottom: 12 }} />
+                <div style={{ color: "#f7fafc", fontWeight: 600, fontSize: "1rem" }}>Message sent!</div>
+                <div style={{ color: "#a0aec0", marginTop: 6, fontSize: "0.88rem" }}>
+                  Thanks for reaching out. I&apos;ll get back to you soon.
+                </div>
+                <Button
+                  type="link"
+                  style={{ marginTop: 12, color: "#63b3ed" }}
+                  onClick={() => setSendResult(null)}
+                >
+                  Send another message
+                </Button>
               </div>
-            </a>
-            <a
-              href={`tel:${SOCIAL_LINKS.phone}`}
-              className={styles.contactLink}
-            >
-              <PhoneOutlined className={styles.contactIcon} />
-              <div>
-                <div className={styles.contactLabel}>Phone</div>
-                <div className={styles.contactValue}>{SOCIAL_LINKS.phone}</div>
-              </div>
-            </a>
-            <a
-              href={SOCIAL_LINKS.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactLink}
-            >
-              <LinkedinOutlined className={styles.contactIcon} />
-              <div>
-                <div className={styles.contactLabel}>LinkedIn</div>
-                <div className={styles.contactValue}>linkedin.com/in/divyansh-mulchandani</div>
-              </div>
-            </a>
-            <a
-              href={SOCIAL_LINKS.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactLink}
-            >
-              <GithubOutlined className={styles.contactIcon} />
-              <div>
-                <div className={styles.contactLabel}>GitHub</div>
-                <div className={styles.contactValue}>github.com/divyansh-mulchandani</div>
-              </div>
-            </a>
-            <a
-              href={SOCIAL_LINKS.medium}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactLink}
-            >
-              <MediumOutlined className={styles.contactIcon} />
-              <div>
-                <div className={styles.contactLabel}>Medium</div>
-                <div className={styles.contactValue}>medium.com/@divyansh.mulchandani</div>
-              </div>
-            </a>
+            ) : (
+              <Form
+                form={contactForm}
+                layout="vertical"
+                onFinish={onContactSubmit}
+                requiredMark={false}
+              >
+                {sendResult === "error" && (
+                  <Alert
+                    type="error"
+                    message={sendError}
+                    showIcon
+                    style={{ marginBottom: 16, borderRadius: 8 }}
+                    closable
+                    onClose={() => setSendResult(null)}
+                  />
+                )}
+                <Form.Item
+                  name="name"
+                  label={<span style={{ color: "#a0aec0" }}>Name</span>}
+                  rules={[{ required: true, message: "Please enter your name" }, { max: 100, message: "Max 100 characters" }]}
+                >
+                  <Input
+                    placeholder="Your name"
+                    size="large"
+                    style={{ borderRadius: 8, background: "rgba(13,27,53,0.8)", borderColor: "rgba(99,179,237,0.2)", color: "#e2e8f0" }}
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="email"
+                  label={<span style={{ color: "#a0aec0" }}>Email</span>}
+                  rules={[
+                    { required: true, message: "Please enter your email" },
+                    { type: "email", message: "Enter a valid email address" },
+                  ]}
+                >
+                  <Input
+                    placeholder="your@email.com"
+                    size="large"
+                    style={{ borderRadius: 8, background: "rgba(13,27,53,0.8)", borderColor: "rgba(99,179,237,0.2)", color: "#e2e8f0" }}
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="message"
+                  label={<span style={{ color: "#a0aec0" }}>Message</span>}
+                  rules={[
+                    { required: true, message: "Please enter your message" },
+                    { max: 2000, message: "Max 2000 characters" },
+                  ]}
+                >
+                  <Input.TextArea
+                    placeholder="Tell me about your project or opportunity..."
+                    rows={5}
+                    style={{ borderRadius: 8, background: "rgba(13,27,53,0.8)", borderColor: "rgba(99,179,237,0.2)", color: "#e2e8f0", resize: "none" }}
+                  />
+                </Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={sending}
+                  icon={<SendOutlined />}
+                  size="large"
+                  block
+                  style={{ borderRadius: 8, fontWeight: 600 }}
+                >
+                  {sending ? "Sending…" : "Send Message"}
+                </Button>
+              </Form>
+            )}
           </div>
+
         </div>
       </section>
 

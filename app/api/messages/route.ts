@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request): Promise<Response> {
   const ip = getClientIp(req);
   if (isRateLimited(ip)) {
-    logger.warn("Rate limit exceeded", { ip, path: "/api/messages" });
+    logger.warn("Rate limit exceeded", { ip, path: "GET /api/messages" });
     return rateLimitedResponse();
   }
 
@@ -45,12 +45,6 @@ export async function POST(req: Request): Promise<Response> {
     return rateLimitedResponse();
   }
 
-  const user = getSessionFromRequest(req);
-  if (!user) {
-    logger.warn("Unauthenticated POST /api/messages", { ip });
-    return unauthorizedResponse();
-  }
-
   let body: { name?: string; email?: string; message?: string };
   try {
     body = await req.json();
@@ -61,25 +55,39 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const { name, email, message } = body;
-  if (!name || !email || !message) {
+  if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return withCors(
-      NextResponse.json(
-        { error: "name, email, and message are required" },
-        { status: 400 }
-      )
+      NextResponse.json({ error: "name, email, and message are required" }, { status: 400 })
+    );
+  }
+
+  if (name.trim().length > 100) {
+    return withCors(
+      NextResponse.json({ error: "Name too long (max 100 characters)" }, { status: 400 })
+    );
+  }
+
+  if (message.trim().length > 2000) {
+    return withCors(
+      NextResponse.json({ error: "Message too long (max 2000 characters)" }, { status: 400 })
     );
   }
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRe.test(email)) {
+  if (!emailRe.test(email.trim())) {
     return withCors(
       NextResponse.json({ error: "Invalid email address" }, { status: 400 })
     );
   }
 
   try {
-    const created = await createMessage({ name, email, message });
-    return withCors(NextResponse.json({ message: created }, { status: 201 }));
+    const created = await createMessage({
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      message: message.trim(),
+    });
+    logger.info("Public message submitted", { ip, email: created.email });
+    return withCors(NextResponse.json({ ok: true, id: created.id }, { status: 201 }));
   } catch (err) {
     logger.error("Failed to create message", {
       error: err instanceof Error ? err.message : String(err),
