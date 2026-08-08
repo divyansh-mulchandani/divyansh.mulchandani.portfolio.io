@@ -18,6 +18,7 @@ import {
   MailOutlined,
   HomeOutlined,
   ReloadOutlined,
+  KeyOutlined,
 } from "@ant-design/icons";
 import styles from "./style.module.css";
 
@@ -149,6 +150,13 @@ export default function MessagesPage() {
                 style={{ borderRadius: 8 }}
               >
                 Portfolio
+              </Button>
+              <Button
+                icon={<KeyOutlined />}
+                href="/messages/change-password"
+                style={{ borderRadius: 8 }}
+              >
+                Change Password
               </Button>
               <Button
                 type="primary"

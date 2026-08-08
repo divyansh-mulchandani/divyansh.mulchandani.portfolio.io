@@ -1,11 +1,13 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHmac, timingSafeEqual, createHash, randomBytes } from "crypto";
 import { getServerEnv } from "./env";
 import { logger } from "./logger";
+import { getDb } from "./mongodb";
 
 const { authSecret, adminUsername, adminPassword, nodeEnv } = getServerEnv();
 
-const SESSION_MAX_AGE_SECONDS = 300; // 5 minutes
+const SESSION_MAX_AGE_SECONDS = 300;
 const COOKIE_NAME = "portfolio_session";
+const ADMIN_COLL = "admin_credentials";
 
 function sign(payload: string): string {
   return createHmac("sha256", authSecret).update(payload).digest("hex");
@@ -45,20 +47,81 @@ export function verifySessionToken(token: string): string | null {
   }
 }
 
-export function validateCredentials(
+function hashPassword(password: string, salt: string): string {
+  return createHash("sha256")
+    .update(salt + password + authSecret)
+    .digest("hex");
+}
+
+interface StoredCredential {
+  username: string;
+  salt: string;
+  hash: string;
+}
+
+async function getStoredCredential(username: string): Promise<StoredCredential | null> {
+  try {
+    const db = await getDb();
+    const doc = await db
+      .collection<StoredCredential>(ADMIN_COLL)
+      .findOne({ username }, { projection: { _id: 0 } });
+    return doc ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function validateCredentials(
   username: string,
   password: string
-): boolean {
+): Promise<boolean> {
+  if (!username || !password) return false;
+
+  const stored = await getStoredCredential(username);
+
+  if (stored) {
+    const hash = hashPassword(password, stored.salt);
+    return timingSafeEqual(Buffer.from(hash), Buffer.from(stored.hash));
+  }
+
   if (!adminUsername || !adminPassword) return false;
-  const uMatch = timingSafeEqual(
-    Buffer.from(username),
-    Buffer.from(adminUsername)
-  );
-  const pMatch = timingSafeEqual(
-    Buffer.from(password),
-    Buffer.from(adminPassword)
-  );
+  const uMatch = timingSafeEqual(Buffer.from(username), Buffer.from(adminUsername));
+  const pMatch = timingSafeEqual(Buffer.from(password), Buffer.from(adminPassword));
   return uMatch && pMatch;
+}
+
+export async function changePassword(
+  username: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<{ ok: boolean; error?: string }> {
+  const valid = await validateCredentials(username, currentPassword);
+  if (!valid) {
+    return { ok: false, error: "Current password is incorrect." };
+  }
+
+  if (newPassword.length < 12) {
+    return { ok: false, error: "New password must be at least 12 characters." };
+  }
+
+  const salt = randomBytes(16).toString("hex");
+  const hash = hashPassword(newPassword, salt);
+
+  try {
+    const db = await getDb();
+    await db.collection<StoredCredential>(ADMIN_COLL).updateOne(
+      { username },
+      { $set: { username, salt, hash } },
+      { upsert: true }
+    );
+    logger.info("Password changed", { username });
+    return { ok: true };
+  } catch (err) {
+    logger.error("Failed to change password", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return { ok: false, error: "Failed to save new password. Try again." };
+  }
 }
 
 export function sessionCookieHeader(token: string): string {
@@ -75,14 +138,13 @@ export function sessionCookieHeader(token: string): string {
 }
 
 export function clearSessionCookieHeader(): string {
-  const parts = [
+  return [
     `${COOKIE_NAME}=`,
     "HttpOnly",
     "SameSite=Strict",
     "Path=/",
     "Max-Age=0",
-  ];
-  return parts.join("; ");
+  ].join("; ");
 }
 
 export function getSessionFromRequest(req: Request): string | null {

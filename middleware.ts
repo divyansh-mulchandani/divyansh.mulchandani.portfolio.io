@@ -35,7 +35,10 @@ export function middleware(req: NextRequest): NextResponse {
   const { pathname } = req.nextUrl;
 
   // Protect /messages (not /messages/login)
-  if (pathname.startsWith("/messages") && !pathname.startsWith("/messages/login")) {
+  if (
+    pathname.startsWith("/messages") &&
+    !pathname.startsWith("/messages/login")
+  ) {
     const cookieHeader = req.headers.get("cookie") ?? "";
     const match = cookieHeader
       .split(";")
