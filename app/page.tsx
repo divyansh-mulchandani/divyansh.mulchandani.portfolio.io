@@ -49,7 +49,7 @@ const SKILLS = [
   {
     icon: <ReadOutlined />,
     title: "AI / ML",
-    tags: ["LangChain", "Claude API", "MCP", "RAG", "Predictive Analytics", "AI/ML in Telecom"],
+    tags: ["LangChain", "LangGraph", "Claude API", "MCP", "RAG", "Predictive Analytics", "AI/ML in Telecom"],
   },
 ];
 
