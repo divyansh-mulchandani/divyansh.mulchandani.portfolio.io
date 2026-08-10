@@ -46,6 +46,11 @@ const SKILLS = [
     title: "Observability",
     tags: ["Prometheus", "Grafana", "Alerting Rules", "Structured Logging", "Incident Detection"],
   },
+  {
+    icon: <ReadOutlined />,
+    title: "AI / ML",
+    tags: ["LangChain", "Claude API", "MCP", "RAG", "Predictive Analytics", "AI/ML in Telecom"],
+  },
 ];
 
 const EXPERIENCE = [
