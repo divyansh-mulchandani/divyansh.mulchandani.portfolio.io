@@ -563,22 +563,232 @@
   color: #63b3ed;
 }
 
-/* ── responsive ── */
+/* ── hamburger (hidden on desktop) ── */
+.navHamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #63b3ed;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+/* ── mobile slide-down nav ── */
+.navMobile {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: rgba(10, 14, 26, 0.97);
+  border-bottom: 1px solid rgba(99, 179, 237, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+}
+
+.navMobileLink {
+  display: block;
+  padding: 14px 24px;
+  color: #a0aec0;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s, background 0.2s;
+}
+
+.navMobileLink:hover {
+  color: #63b3ed;
+  background: rgba(99, 179, 237, 0.06);
+}
+
+/* ── tablet (769px – 1024px) ── */
+@media (max-width: 1024px) {
+  .nav {
+    padding: 0 32px;
+  }
+
+  .section,
+  .sectionInner {
+    padding: 72px 32px;
+  }
+
+  .heroContent {
+    max-width: 680px;
+  }
+
+  .heroSummary {
+    font-size: 0.98rem;
+  }
+
+  .aboutGrid {
+    gap: 32px;
+  }
+
+  .statsGrid {
+    gap: 16px;
+  }
+
+  .skillsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .certsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+/* ── mobile (≤ 768px) ── */
 @media (max-width: 768px) {
   .nav {
-    padding: 0 20px;
+    padding: 0 16px;
   }
+
   .navLinks {
     display: none;
   }
-  .aboutGrid,
-  .contactGrid {
+
+  .navHamburger {
+    display: block;
+  }
+
+  /* hero */
+  .hero {
+    padding: 0 16px;
+    padding-top: 80px;
+  }
+
+  .heroContent {
+    max-width: 100%;
+  }
+
+  .heroSummary {
+    font-size: 0.93rem;
+    margin-bottom: 28px;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .heroBadges {
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  /* sections */
+  .section,
+  .sectionInner {
+    padding: 56px 16px;
+  }
+
+  .sectionTitle {
+    margin-bottom: 32px;
+  }
+
+  /* about */
+  .aboutGrid {
     grid-template-columns: 1fr;
     gap: 28px;
   }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .statCard {
+    padding: 18px 12px;
+  }
+
+  .statNumber {
+    font-size: 1.6rem;
+  }
+
+  /* skills */
+  .skillsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .skillCategory {
+    padding: 20px;
+  }
+
+  /* experience */
+  .timeline {
+    padding-left: 20px;
+  }
+
+  .timelineItem::before {
+    left: -25px;
+  }
+
+  /* projects */
+  .projectsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .projectCard {
+    padding: 24px 20px;
+  }
+
+  /* certs */
+  .certsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* edu / achievement */
   .eduCard,
   .achieveCard {
     flex-direction: column;
     gap: 12px;
+    padding: 24px 20px;
+  }
+
+  /* contact */
+  .contactGrid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .contactFormCard {
+    padding: 24px 16px;
+  }
+
+  /* footer */
+  .footerLinks {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+/* ── extra-small (≤ 400px) ── */
+@media (max-width: 400px) {
+  .heroName {
+    font-size: 2rem;
+  }
+
+  .heroTitle {
+    font-size: 0.82rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .heroBadge {
+    font-size: 0.72rem;
+    padding: 5px 10px;
   }
 }

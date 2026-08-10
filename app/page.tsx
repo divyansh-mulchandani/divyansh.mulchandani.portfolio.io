@@ -166,14 +166,33 @@ export default function Home() {
             </li>
           ))}
         </ul>
+        <button
+          className={styles.navHamburger}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </nav>
+
+      {/* ── mobile nav ── */}
+      {menuOpen && (
+        <div className={styles.navMobile}>
+          {["about", "skills", "experience", "projects", "certifications", "contact"].map((s) => (
+            <a key={s} href={`#${s}`} className={styles.navMobileLink} onClick={() => setMenuOpen(false)}>
+              {s}
+            </a>
+          ))}
+        </div>
+      )}
 
       {/* ── hero ── */}
       <section id="hero" className={styles.hero}>
         <div className={styles.heroBg} />
         <div className={styles.heroContent}>
           <h1 className={styles.heroName}>Divyansh Mulchandani</h1>
-          <p className={styles.heroTitle}>Cloud Platform Engineer &nbsp;·&nbsp; SRE &nbsp;·&nbsp; DevOps &nbsp;·&nbsp; Forward Deployed Engineer &nbsp;·&nbsp; Automation &nbsp;·&nbsp; Backend Engineer</p>
+          <p className={styles.heroTitle}>Cloud Platform Engineer · SRE · DevOps · Forward Deployed Engineer · Automation · Backend Engineer</p>
           <p className={styles.heroSummary}>
             Cloud Platform Engineer with 3+ years of experience at a wireless telecom solutions company.
             Proficient in Linux, Docker, Kubernetes, AWS, on-premises cloud infrastructure, and CI/CD.
