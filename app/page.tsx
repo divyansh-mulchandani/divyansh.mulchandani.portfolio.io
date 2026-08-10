@@ -234,7 +234,7 @@ export default function Home() {
           <div className={styles.aboutGrid}>
             <div>
               <p className={styles.aboutText}>
-                I&apos;m a Cloud Platform Engineer currently working at Altiostar Networks, a Rakuten Symphony Company —
+                I&apos;m a Cloud Platform Engineer currently working at Altiostar Networks, a Rakuten Symphony Company -
                 a leading wireless telecom solutions provider working on open RAN infrastructure.
               </p>
               <p className={styles.aboutText} style={{ marginTop: 16 }}>
@@ -324,7 +324,7 @@ export default function Home() {
         <div className={styles.projectsGrid}>
           <div className={styles.projectCard}>
             <div className={styles.projectTitle}>Blockchain-Enabled Supply Chain Automation</div>
-            <div className={styles.projectMeta}>May 2023 · Capstone — Vellore Institute of Technology</div>
+            <div className={styles.projectMeta}>May 2023 · Capstone - Vellore Institute of Technology</div>
             <p className={styles.projectDesc}>
               Built a decentralized supply chain framework using Ethereum, IoT, and AI to improve
               traceability, reduce fraud, and enable predictive analytics.
@@ -350,7 +350,7 @@ export default function Home() {
           </div>
           <div className={styles.projectCard}>
             <div className={styles.projectTitle}>Predictive Network Scaling (Patent)</div>
-            <div className={styles.projectMeta}>May 2024 · SIPL 2.0 Winner — AI &amp; ML in Telecom</div>
+            <div className={styles.projectMeta}>May 2024 · SIPL 2.0 Winner - AI &amp; ML in Telecom</div>
             <p className={styles.projectDesc}>
               Awarded innovation patent for predictive network scaling using FCAPS data.
               Winner of Standard and Implementation Patents League (SIPL) 2.0.
@@ -385,7 +385,7 @@ export default function Home() {
           <div className={styles.achieveCard}>
             <TrophyOutlined style={{ fontSize: 40, color: "#f6ad55", flexShrink: 0, marginTop: 4 }} />
             <div>
-              <div className={styles.achieveTitle}>SIPL 2.0 Winner — AI &amp; ML in Telecom</div>
+              <div className={styles.achieveTitle}>SIPL 2.0 Winner - AI &amp; ML in Telecom</div>
               <div className={styles.achieveDate}>May 2024 · Standard and Implementation Patents League</div>
               <p className={styles.achieveDesc}>
                 Awarded for innovation in &apos;AI &amp; ML in Telecom&apos; for a patent on predictive network
@@ -433,11 +433,11 @@ export default function Home() {
         <h2 className={styles.sectionTitle}>Get in <span>Touch</span></h2>
         <div className={styles.contactGrid}>
 
-          {/* left — links */}
+          {/* left - links */}
           <div>
             <p className={styles.aboutText}>
               I&apos;m open to Cloud Platform Engineering, SRE, DevOps, Forward Deployed Engineering, Automation, Backend Engineering, and Infrastructure Engineering roles.
-              Whether you have a project, a question, or just want to say hello — drop me a message.
+              Whether you have a project, a question, or just want to say hello - drop me a message.
             </p>
             <div className={styles.contactLinks} style={{ marginTop: 28 }}>
               <a href={`mailto:${SOCIAL_LINKS.email}`} className={styles.contactLink}>
@@ -472,7 +472,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* right — contact form */}
+          {/* right - contact form */}
           <div className={styles.contactFormCard}>
             {sendResult === "success" ? (
               <div className={styles.contactSuccess}>
